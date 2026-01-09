@@ -1,14 +1,13 @@
-import fetch from "node-fetch";
+const fetch = require("node-fetch");
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   const targetUrl = req.query.url;
   if (!targetUrl) {
     return res.status(400).json({ error: "Missing 'url' query parameter" });
   }
 
-  // Validate URL
   try {
-    new URL(targetUrl);
+    new URL(targetUrl); // validate URL
   } catch {
     return res.status(400).json({ error: "Invalid URL" });
   }
@@ -34,4 +33,4 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(500).json({ error: "Request failed", details: err.message });
   }
-}
+};
