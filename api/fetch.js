@@ -1,13 +1,12 @@
-const fetch = require("node-fetch");
-
 module.exports = async (req, res) => {
   const targetUrl = req.query.url;
   if (!targetUrl) {
     return res.status(400).json({ error: "Missing 'url' query parameter" });
   }
 
+  // Validate URL
   try {
-    new URL(targetUrl); // validate URL
+    new URL(targetUrl);
   } catch {
     return res.status(400).json({ error: "Invalid URL" });
   }
@@ -15,7 +14,6 @@ module.exports = async (req, res) => {
   try {
     const response = await fetch(targetUrl, {
       headers: { "User-Agent": "Node Proxy Server" },
-      timeout: 10000
     });
 
     const text = await response.text();
@@ -27,7 +25,7 @@ module.exports = async (req, res) => {
       return res.status(502).json({
         error: "Invalid JSON from target",
         status_code: response.status,
-        content: text.slice(0, 500)
+        content: text.slice(0, 500),
       });
     }
   } catch (err) {
